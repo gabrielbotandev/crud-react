@@ -25,12 +25,16 @@ function App() {
 
   return (
     <>
-      <div className="flex flex-col items-center mt-20 gap-4">
-        <h2 className="font-semibold"></h2>
-        <Form />
-        <Grid users={users}/>
+      <div className="mt-20 mb-4">
+        <h2 className="flex justify-center font-bold text-primary text-2xl">
+          Cadastro de usuários
+        </h2>
       </div>
-      <ToastContainer autoClose={3000} />
+      <div className="flex flex-col items-center gap-4">
+        <Form getUsers={getUsers} onEdit={onEdit} setOnEdit={setOnEdit} />
+        <Grid users={users} setUsers={setUsers} setOnEdit={setOnEdit} />
+      </div>
+      <ToastContainer position="top-right" />
     </>
   )
 }

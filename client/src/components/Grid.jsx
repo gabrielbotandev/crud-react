@@ -1,13 +1,32 @@
 import React from 'react'
 import axios from 'axios'
-import { FaTrash, FaEdit } from 'react-icons/fa'
+import { SquarePen, Trash2 } from 'lucide-react'
+import { toast } from 'react-toastify'
 
-const Grid = ({ users }) => {
+const Grid = ({ users, setUsers, setOnEdit }) => {
+  const handleEdit = (item) => {
+    setOnEdit(item)
+  }
+
+  const handleDelete = async (id) => {
+    await axios
+      .delete('http://localhost:8800/' + id)
+      .then(({ data }) => {
+        const newArray = users.filter((user) => user.id !== id)
+
+        setUsers(newArray)
+        toast.success(data)
+      })
+      .catch(({ data }) => toast.error(data))
+
+    setOnEdit(null)
+  }
+
   return (
-    <div class="overflow-x-auto rounded-box border border-base-content/10 bg-base-100">
-      <table className="table table-zebra">
+    <div className="overflow-x-auto rounded-box border border-base-content/10 bg-base-100">
+      <table className="table table-zebra truncate">
         <thead>
-          <tr>
+          <tr className=''>
             <th>Nome</th>
             <th>Email</th>
             <th className="sm:display-none">Telefone</th>
@@ -21,8 +40,14 @@ const Grid = ({ users }) => {
               <td className="w-30">{item.email}</td>
               <td className="w-20">{item.tel}</td>
               <td className="flex gap-1 items-center justify-center">
-                {' '}
-                <FaEdit /> <FaTrash onClick={() => handleDelete(item.id)} />
+                <SquarePen
+                  className="cursor-pointer text-blue-500"
+                  onClick={() => handleEdit(item)}
+                />
+                <Trash2
+                  className="cursor-pointer text-red-500"
+                  onClick={() => handleDelete(item.id)}
+                />
               </td>
             </tr>
           ))}
